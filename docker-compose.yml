@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  transmart-build:
+    build:
+      context: ./
+      dockerfile: Dockerfile.build
+    image: viden/transmart-build
+    # volumes:
+    #  - ../transmart-core:/home/gradle/transmart-core
+  transmart-run:
+    build:
+      context: ./
+      dockerfile: Dockerfile.run
+    image: viden/transmart-run
+    volumes:
+      - ../transmart-core:/home/transmart-core

@@ -1,0 +1,26 @@
+FROM gradle:jre10
+
+USER root
+
+RUN apt-get -y update && apt-get -y install build-essential && apt-get -y install php
+
+COPY apache-maven-3.5.2-bin.zip /home/gradle/apache-maven-3.5.2-bin.zip
+RUN unzip /home/gradle/apache-maven-3.5.2-bin.zip
+ENV PATH="/home/gradle/apache-maven-3.5.2/bin:${PATH}"
+
+COPY transmart-core/ /home/gradle/transmart-core/
+WORKDIR /home/gradle/transmart-core
+
+RUN mvn dependency:get -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DremoteRepositories=https://repo.thehyve.nl/content/repositories/snapshots/
+RUN mvn -X dependency:unpack -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DoutputDirectory=/home/gradle/transmart-core
+
+COPY vars /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
+
+WORKDIR /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
+
+# RUN /bin/bash -c "source vars"
+# RUN make -C config install
+
+WORKDIR /home/gradle/transmart-core
+
+CMD gradle :transmart-server:bootRepackage --stacktrace
