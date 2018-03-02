@@ -1,0 +1,6 @@
+FROM openjdk:8-jdk
+
+USER root
+
+RUN curl -s "https://get.sdkman.io" | bash
+RUN /bin/bash -c "source '/root/.sdkman/bin/sdkman-init.sh'; sdk install grails 3.2.3;"

@@ -1,8 +1,11 @@
-FROM gradle:jre10
+FROM gradle:jdk8
 
 USER root
 
-RUN apt-get -y update && apt-get -y install build-essential && apt-get -y install php
+RUN apt-get -y update && apt-get -y install build-essential && apt-get -y install php && apt-get -y install zip && apt-get -y install unzip
+
+RUN curl -s "https://get.sdkman.io" | bash
+RUN /bin/bash -c "source '/root/.sdkman/bin/sdkman-init.sh'; sdk install grails 3.2.3;"
 
 COPY apache-maven-3.5.2-bin.zip /home/gradle/apache-maven-3.5.2-bin.zip
 RUN unzip /home/gradle/apache-maven-3.5.2-bin.zip
@@ -23,4 +26,4 @@ WORKDIR /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
 
 WORKDIR /home/gradle/transmart-core
 
-CMD gradle :transmart-server:bootRepackage --stacktrace
+CMD gradle :transmart-server:bootRepackage
