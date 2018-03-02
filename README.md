@@ -1,11 +1,11 @@
 # transmart-docker
 
-1. Clone https://github.com/thehyve/transmart-core.git
-2. Clone ... transmart-docker
-3. docker-compose build
-3.5. Download Maven
-3.6 Create/Fill out vars file
-4. Create the tranSMART WAR.
-    ```
-        docker-compose run transmart-build
-    ```
+1. Clone this repo.
+2. Inside cloned folder, clone tranSMART Core 17.1 repo - https://github.com/thehyve/transmart-core.git
+3. ```
+    docker-compose build transmart-build
+   ```
+4. ```
+    docker-compose run transmart-build
+   ```
+
