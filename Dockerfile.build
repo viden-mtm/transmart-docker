@@ -17,7 +17,7 @@ WORKDIR /home/gradle/transmart-core
 RUN mvn dependency:get -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DremoteRepositories=https://repo.thehyve.nl/content/repositories/snapshots/
 RUN mvn -X dependency:unpack -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DoutputDirectory=/home/gradle/transmart-core
 
-COPY vars /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
+# COPY vars /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
 
 WORKDIR /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
 
