@@ -1,29 +1,31 @@
-FROM gradle:jdk8
+FROM ubuntu:xenial
 
 USER root
 
-RUN apt-get -y update && apt-get -y install build-essential && apt-get -y install php && apt-get -y install zip && apt-get -y install unzip
+RUN apt-get -y update && \
+    apt-get -y install build-essential && \
+    apt-get -y install php && \
+    apt-get -y install zip && \
+    apt-get -y install unzip && \
+    apt-get -y install maven && \
+    apt-get -y install curl
 
 RUN curl -s "https://get.sdkman.io" | bash
-RUN /bin/bash -c "source '/root/.sdkman/bin/sdkman-init.sh'; sdk install grails 3.2.3;"
+RUN /bin/bash -c "source '/root/.sdkman/bin/sdkman-init.sh'; sdk install grails 3.2.3;sdk install gradle 2.12;"
 
-COPY apache-maven-3.5.2-bin.zip /home/gradle/apache-maven-3.5.2-bin.zip
-RUN unzip /home/gradle/apache-maven-3.5.2-bin.zip
-ENV PATH="/home/gradle/apache-maven-3.5.2/bin:${PATH}"
-
-COPY transmart-core/ /home/gradle/transmart-core/
-WORKDIR /home/gradle/transmart-core
+COPY transmart-core/ /home/transmart/transmart-core/
+WORKDIR /home/transmart/transmart-core
 
 RUN mvn dependency:get -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DremoteRepositories=https://repo.thehyve.nl/content/repositories/snapshots/
-RUN mvn -X dependency:unpack -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DoutputDirectory=/home/gradle/transmart-core
+RUN mvn -X dependency:unpack -Dartifact=org.transmartproject:transmart-data:17.1-SNAPSHOT:tar -DoutputDirectory=/home/transmart/transmart-core
 
-# COPY vars /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
+# COPY vars /home/transmart/transmart-core/transmart-data-17.1-SNAPSHOT/
 
-WORKDIR /home/gradle/transmart-core/transmart-data-17.1-SNAPSHOT/
+WORKDIR /home/transmart/transmart-core/transmart-data-17.1-SNAPSHOT/
 
 # RUN /bin/bash -c "source vars"
 # RUN make -C config install
 
-WORKDIR /home/gradle/transmart-core
+WORKDIR /home/transmart/transmart-core
 
-CMD gradle :transmart-server:bootRepackage
+CMD /root/.sdkman/candidates/gradle/current/bin/gradle :transmart-server:bootRepackage
